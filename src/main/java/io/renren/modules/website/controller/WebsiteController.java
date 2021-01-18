@@ -40,7 +40,7 @@ public class WebsiteController {
                     subs.add(sub);
                     getFiles(fileIndex.getPath(), sub);
                 } else {
-                    FileEntity sub = getInstance(0, fileIndex.getName(), fileIndex.getPath());
+                    FileEntity sub = getInstance(1, fileIndex.getName(), fileIndex.getPath());
                     subs.add(sub);
                 }
             }
