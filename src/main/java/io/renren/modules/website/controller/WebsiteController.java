@@ -40,8 +40,10 @@ public class WebsiteController {
         if (file.exists()) {
             return R.error("目录已存在");
         }
-        if (file.isDirectory()) {
+        if (file.getParentFile().isDirectory()) {
             file.mkdirs();
+        } else {
+            return R.error("非法目标");
         }
         return R.ok();
     }
@@ -54,12 +56,12 @@ public class WebsiteController {
         path = realPath(path);
         File file = new File(path);
         if (!file.isDirectory()) {
-            return R.error("所选目标不是目录");
+            return R.error("非法目标");
         }
         if (file.exists()) {
             deleteDirectory(path);
         } else {
-            return R.error("目录不存在");
+            return R.error("目标不存在");
         }
         return R.ok();
     }
@@ -72,12 +74,12 @@ public class WebsiteController {
         path = realPath(path);
         File file = new File(path);
         if (file.isDirectory()) {
-            return R.error("所选目标不是文件");
+            return R.error("非法目标");
         }
         if (file.exists()) {
             deleteFile(path);
         } else {
-            return R.error("目录不存在");
+            return R.error("目标不存在");
         }
         return R.ok();
     }
@@ -89,6 +91,13 @@ public class WebsiteController {
         }
         if (!isLegal(path)) {
             return R.error("非法路径");
+        }
+        File parentFile = new File(CommonConfig.UPLOAD_PATH + path);
+        if (parentFile.exists()) {
+            return R.error("目标不存在");
+        }
+        if (parentFile.isDirectory()) {
+            return R.error("非法目标");
         }
         try {
             // 文件路径
@@ -188,6 +197,6 @@ public class WebsiteController {
     }
 
     public String realPath(String path) {
-        return CommonConfig.UPLOAD_PATH + path.substring(CommonConfig.RESOURCE_PREFIX.length());
+        return CommonConfig.UPLOAD_PATH + path;
     }
 }
