@@ -88,9 +88,9 @@ public class WebsiteController {
         }
         try {
             // 文件路径
-            String fileName = FileUploadUtils.upload(path, file);
+            String fileName = FileUploadUtils.upload(CommonConfig.UPLOAD_PATH + path, file);
             // 返回
-            return R.ok().put("fileName", fileName);
+            return R.ok();
         } catch (Exception e) {
             // 返回错误信息
             return R.error(e.getMessage());
@@ -180,6 +180,6 @@ public class WebsiteController {
     }
 
     public boolean isLegal(String path) {
-        return path.startsWith(CommonConfig.BASE_PATH);
+        return path.startsWith(CommonConfig.RESOURCE_PREFIX);
     }
 }

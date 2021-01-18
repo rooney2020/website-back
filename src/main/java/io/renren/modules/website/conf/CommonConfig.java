@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 public class CommonConfig {
     public static final String FILE_DELEMITER = "/";
     public static final String URL = "/home/projects/upload/temp";
-    public static final String UPLOAD_PATH = "/home/projects/upload/temp";
-    public static final String RESOURCE_PREFIX = "/profile";
-//    public static final String BASE_PATH = "D:\\upload\\notes";
-    public static final String BASE_PATH = "/home/projects/upload/notes";
+    public static final String UPLOAD_PATH = "D:\\upload\\";
+    public static final String RESOURCE_PREFIX = "notes/";
+    public static final String BASE_PATH = "D:\\upload\\notes";
+//    public static final String BASE_PATH = "/home/projects/upload/notes";
 
     /**
      * 获取完整的请求路径，包括：域名，端口，上下文访问路径
