@@ -9,6 +9,10 @@ import java.util.UUID;
  * @date 2021.01.18
  */
 public class CommonUtils {
+
+    /**
+     * 生成uuid
+     */
     public static Integer uuid() {
         UUID uuid = UUID.randomUUID();
         String str = uuid.toString();
