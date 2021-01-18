@@ -5,8 +5,6 @@ import io.renren.common.utils.R;
 import io.renren.modules.website.conf.CommonConfig;
 import io.renren.modules.website.entity.FileEntity;
 import io.renren.modules.website.utils.FileUploadUtils;
-import org.apache.commons.io.monitor.FileEntry;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +35,11 @@ public class WebsiteController {
         if (!isLegal(path)) {
             return R.error("非法路径");
         }
+        path = realPath(path);
         File file = new File(path);
+        if (file.exists()) {
+            return R.error("目录已存在");
+        }
         if (file.isDirectory()) {
             file.mkdirs();
         }
@@ -49,6 +51,7 @@ public class WebsiteController {
         if (!isLegal(path)) {
             return R.error("非法路径");
         }
+        path = realPath(path);
         File file = new File(path);
         if (!file.isDirectory()) {
             return R.error("所选目标不是目录");
@@ -66,6 +69,7 @@ public class WebsiteController {
         if (!isLegal(path)) {
             return R.error("非法路径");
         }
+        path = realPath(path);
         File file = new File(path);
         if (file.isDirectory()) {
             return R.error("所选目标不是文件");
@@ -181,5 +185,9 @@ public class WebsiteController {
 
     public boolean isLegal(String path) {
         return path.startsWith(CommonConfig.RESOURCE_PREFIX);
+    }
+
+    public String realPath(String path) {
+        return CommonConfig.UPLOAD_PATH + path.substring(CommonConfig.RESOURCE_PREFIX.length());
     }
 }
