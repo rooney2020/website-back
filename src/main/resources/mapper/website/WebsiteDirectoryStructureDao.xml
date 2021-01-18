@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.website.dao.WebsiteDirectoryStructureDao">
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.website.entity.FileEntity" id="manageParamMap">
+        <result property="direcId" column="direc_id"/>
+        <result property="direcName" column="direc_name"/>
+        <result property="direcLevel" column="direc_level"/>
+        <result property="direcRootId" column="direc_root_id"/>
+    </resultMap>
+    <resultMap type="io.renren.modules.website.entity.FileEntity" id="groupMap">
+        <result property="direcId" column="direc_id"/>
+        <result property="direcName" column="direc_name"/>
+        <result property="direcLevel" column="direc_level"/>
+        <result property="direcRootId" column="direc_root_id"/>
+        <collection property="children" ofType="io.renren.modules.website.entity.FileEntity"
+                    select="getDataList" column="{direcId=direc_id}">
+            <result property="direcId" column="direc_id"/>
+            <result property="direcName" column="direc_name"/>
+            <result property="direcLevel" column="direc_level"/>
+            <result property="direcRootId" column="direc_root_id"/>
+        </collection>
+    </resultMap>
+    <select id="getList" resultMap="groupMap">
+        select * from website_directory_structure
+    </select>
+    <select id="getDataList" resultMap="groupMap">
+        select * from website_directory_structure where direc_root_id = #{direcId}
+    </select>
+    <select id="getDirec" resultType="io.renren.modules.website.entity.FileEntity">
+        select * from website_directory_structure where root_path = #{rootPath}
+    </select>
+</mapper>
