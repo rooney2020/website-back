@@ -22,7 +22,7 @@ public class FileEntity implements Serializable {
     /**
      * 目录id
      */
-    private Integer uuid = CommonUtils.uuid();
+    private Integer id = CommonUtils.uuid();
 
     /**
      * 文件类型，0：目录，1：文件
@@ -32,7 +32,7 @@ public class FileEntity implements Serializable {
     /**
      * 目录名称
      */
-    private String fileName;
+    private String label;
 
     /**
      * 路径

@@ -8,7 +8,10 @@ import io.renren.modules.website.utils.FileUploadUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,14 +88,15 @@ public class WebsiteController {
     }
 
     @PostMapping("/upload")
-    public R uploadFile(@RequestParam String path, @RequestParam("file") MultipartFile file) {
+    public R uploadFile(@RequestParam("path") String path, @RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             throw new RRException("上传文件不能为空");
         }
         if (!isLegal(path)) {
             return R.error("非法路径");
         }
-        File parentFile = new File(CommonConfig.UPLOAD_PATH + path);
+        path = realPath(path);
+        File parentFile = new File(path);
         if (parentFile.exists()) {
             return R.error("目标不存在");
         }
@@ -101,13 +105,40 @@ public class WebsiteController {
         }
         try {
             // 文件路径
-            String fileName = FileUploadUtils.upload(CommonConfig.UPLOAD_PATH + path, file);
+            String fileName = FileUploadUtils.upload(path, file);
             // 返回
             return R.ok();
         } catch (Exception e) {
             // 返回错误信息
             return R.error(e.getMessage());
         }
+    }
+
+    @PostMapping("/file")
+    public R readFile(@RequestParam("path") String path) {
+        if (!isLegal(path)) {
+            return R.error("非法路径");
+        }
+        path = realPath(path);
+        File file = new File(path);
+        if (file.isDirectory()) {
+            return R.error("非法目标");
+        }
+        String str = "";
+        if (file.exists()) {
+            try {
+                BufferedReader in = new BufferedReader(new FileReader(path));
+                String temp = "";
+                while ((temp = in.readLine()) != null) {
+                    str += temp;
+                }
+            } catch (IOException e) {
+                return R.error("读取文件异常");
+            }
+        } else {
+            return R.error("目标不存在");
+        }
+        return R.ok().put("data", str);
     }
 
     public void getFiles(String path, FileEntity origin) throws Exception {
