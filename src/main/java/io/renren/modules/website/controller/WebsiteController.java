@@ -163,7 +163,7 @@ public class WebsiteController {
     public FileEntity getInstance(Integer fileType, String fileName, String rootPath) {
         FileEntity fileEntity = new FileEntity();
         fileEntity.setFileType(fileType);
-        fileEntity.setFileName(fileName);
+        fileEntity.setLabel(fileName);
         fileEntity.setRootPath(rootPath);
         return fileEntity;
     }
